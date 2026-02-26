@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Install Guide</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>📦 Install Guide</h1>
+    <p class="subtitle">Follow the steps below to get set up quickly.</p>
+  </header>
+
+  <main>
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <p class="progress-label" id="progressLabel">0 of 5 steps completed</p>
+
+    <ol class="steps" id="stepList">
+      <li class="step" data-step="1">
+        <label>
+          <input type="checkbox" class="step-check" />
+          <span class="step-title">Prerequisites</span>
+        </label>
+        <div class="step-body">
+          <p>Ensure the following are installed on your system:</p>
+          <ul>
+            <li><a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js</a> v18 or higher</li>
+            <li><a href="https://git-scm.com/" target="_blank" rel="noopener">Git</a> v2.30 or higher</li>
+          </ul>
+          <div class="code-block">
+            <code>node --version</code>
+            <button class="copy-btn" aria-label="Copy command">Copy</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="step" data-step="2">
+        <label>
+          <input type="checkbox" class="step-check" />
+          <span class="step-title">Clone the Repository</span>
+        </label>
+        <div class="step-body">
+          <p>Clone the project from GitHub:</p>
+          <div class="code-block">
+            <code>git clone https://github.com/Onyx2026-Rob/bobs-repository.git</code>
+            <button class="copy-btn" aria-label="Copy command">Copy</button>
+          </div>
+          <div class="code-block">
+            <code>cd bobs-repository</code>
+            <button class="copy-btn" aria-label="Copy command">Copy</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="step" data-step="3">
+        <label>
+          <input type="checkbox" class="step-check" />
+          <span class="step-title">Install Dependencies</span>
+        </label>
+        <div class="step-body">
+          <p>Install all required dependencies:</p>
+          <div class="code-block">
+            <code>npm install</code>
+            <button class="copy-btn" aria-label="Copy command">Copy</button>
+          </div>
+        </div>
+      </li>
+
+      <li class="step" data-step="4">
+        <label>
+          <input type="checkbox" class="step-check" />
+          <span class="step-title">Configure Environment</span>
+        </label>
+        <div class="step-body">
+          <p>Copy the example environment file and update the values:</p>
+          <div class="code-block">
+            <code>cp .env.example .env</code>
+            <button class="copy-btn" aria-label="Copy command">Copy</button>
+          </div>
+          <p>Open <code>.env</code> in your editor and set the required variables.</p>
+        </div>
+      </li>
+
+      <li class="step" data-step="5">
+        <label>
+          <input type="checkbox" class="step-check" />
+          <span class="step-title">Run the Application</span>
+        </label>
+        <div class="step-body">
+          <p>Start the development server:</p>
+          <div class="code-block">
+            <code>npm start</code>
+            <button class="copy-btn" aria-label="Copy command">Copy</button>
+          </div>
+          <p>Open <a href="http://localhost:3000" target="_blank" rel="noopener">http://localhost:3000</a> in your browser.</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="completion-banner" id="completionBanner" hidden>
+      🎉 All steps complete — you're ready to go!
+    </div>
+
+    <button class="reset-btn" id="resetBtn">Reset Progress</button>
+  </main>
+
+  <footer>
+    <p>Need help? <a href="https://github.com/Onyx2026-Rob/bobs-repository/issues" target="_blank" rel="noopener">Open an issue</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

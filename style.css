@@ -1,0 +1,265 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary: #0969da;
+  --primary-dark: #0550ae;
+  --success: #1a7f37;
+  --bg: #f6f8fa;
+  --card-bg: #ffffff;
+  --border: #d0d7de;
+  --text: #1f2328;
+  --muted: #57606a;
+  --code-bg: #f6f8fa;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+header {
+  background: var(--primary);
+  color: #fff;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+header .subtitle {
+  margin-top: .4rem;
+  opacity: .9;
+}
+
+/* ── Main layout ── */
+main {
+  flex: 1;
+  max-width: 780px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* ── Progress bar ── */
+.progress-bar-container {
+  background: var(--border);
+  border-radius: 99px;
+  height: 10px;
+  overflow: hidden;
+  margin-bottom: .5rem;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--success);
+  border-radius: 99px;
+  transition: width .35s ease;
+}
+
+.progress-label {
+  font-size: .875rem;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+/* ── Step list ── */
+.steps {
+  list-style: none;
+  counter-reset: step-counter;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.step {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  counter-increment: step-counter;
+  transition: border-color .2s;
+}
+
+.step.done {
+  border-color: #2da44e;
+}
+
+.step > label {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.step > label::before {
+  content: counter(step-counter);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  min-width: 1.75rem;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+.step.done > label::before {
+  content: "✓";
+  background: var(--success);
+}
+
+.step-check {
+  display: none;
+}
+
+.step-title {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.step.done .step-title {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.step-body {
+  padding: 0 1.25rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.step.done .step-body {
+  display: none;
+}
+
+/* ── Code blocks ── */
+.code-block {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: .6rem 1rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .9rem;
+  overflow-x: auto;
+}
+
+.code-block code {
+  flex: 1;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: .2rem .6rem;
+  font-size: .75rem;
+  cursor: pointer;
+  color: var(--muted);
+  transition: background .15s, color .15s;
+}
+
+.copy-btn:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* ── Completion banner ── */
+.completion-banner {
+  background: #dafbe1;
+  border: 1px solid #2da44e;
+  color: var(--success);
+  border-radius: var(--radius);
+  padding: 1rem 1.5rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+}
+
+/* ── Reset button ── */
+.reset-btn {
+  display: block;
+  margin: 1.5rem auto 0;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: .5rem 1.25rem;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: .875rem;
+  transition: border-color .15s, color .15s;
+}
+
+.reset-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--muted);
+  font-size: .875rem;
+}
+
+footer a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* ── Links ── */
+a {
+  color: var(--primary);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  .step > label {
+    padding: .75rem 1rem;
+  }
+
+  .step-body {
+    padding: 0 1rem 1rem 1rem;
+  }
+}
