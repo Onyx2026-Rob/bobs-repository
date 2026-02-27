@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Enterprise Engineering Systems Knowledge Library</title>
+  <style>
+    :root{
+      --bg0:#070a12;
+      --bg1:#0b1220;
+      --stroke:rgba(255,255,255,.12);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.68);
+      --faint:rgba(255,255,255,.48);
+      --accent:#4ea1ff;
+      --accent2:#7c5cff;
+
+      --radius:16px;
+      --radius2:20px;
+      --shadow:0 24px 70px rgba(0,0,0,.55);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 10% 0%, rgba(78,161,255,.18), transparent 60%),
+        radial-gradient(1000px 600px at 90% 10%, rgba(124,92,255,.16), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      display:flex;
+      justify-content:center;
+      padding:28px 18px 56px;
+    }
+
+    .shell{ width:100%; max-width:1100px; }
+
+    .header{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding:18px;
+      border-radius:var(--radius2);
+      background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      border:1px solid var(--stroke);
+      box-shadow:var(--shadow);
+    }
+
+    .brandLogo{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.05);
+      flex:0 0 auto;
+      display:grid;
+      place-items:center;
+    }
+    .brandLogo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .headerText h1{ margin:0; font-size:20px; letter-spacing:.2px; }
+    .headerText p{ margin:4px 0 0; color:var(--muted); font-size:13px; line-height:1.3; }
+
+    .spacer{ flex:1; }
+
+    .ghostBtn{
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+    }
+    .ghostBtn:hover{ background:rgba(255,255,255,.08); }
+
+    .modeGrid{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+
+    .modeGrid3{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:12px;
+    }
+    @media (max-width:900px){ .modeGrid3{ grid-template-columns:1fr; } }
+
+    .bigModeCard{
+      border-radius:var(--radius2);
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.12);
+      padding:18px;
+      cursor:pointer;
+      text-align:left;
+      color:var(--text);
+      box-shadow:0 18px 40px rgba(0,0,0,.28);
+      transition:transform 120ms ease, background 120ms ease, border-color 120ms ease;
+      min-height:96px;
+    }
+    .bigModeCard:hover{
+      transform:translateY(-2px);
+      background:rgba(255,255,255,.07);
+      border-color:rgba(255,255,255,.18);
+    }
+    .bigModeTitle{ font-size:18px; font-weight:800; margin-bottom:6px; }
+    .bigModeDesc{ font-size:13px; color:var(--muted); }
+
+    .appGrid{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:12px;
+    }
+    @media (max-width:980px){ .appGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width:520px){ .appGrid{ grid-template-columns: 1fr; } }
+
+    .appCard{
+      text-align:left;
+      border-radius:var(--radius);
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.12);
+      padding:14px;
+      cursor:pointer;
+      color:var(--text);
+      transition:transform 120ms ease, background 120ms ease, border-color 120ms ease;
+    }
+    .appCard:hover{
+      transform:translateY(-2px);
+      background:rgba(255,255,255,.07);
+      border-color:rgba(255,255,255,.18);
+    }
+    .appCard.active{
+      border-color:rgba(78,161,255,.65);
+      background:linear-gradient(180deg, rgba(78,161,255,.12), rgba(255,255,255,.05));
+    }
+
+    .appCard.green{
+      border-color: rgba(60, 210, 140, .55);
+      background: linear-gradient(180deg, rgba(60, 210, 140, .16), rgba(255,255,255,.05));
+    }
+    .appCard.green:hover{
+      border-color: rgba(60, 210, 140, .75);
+      background: linear-gradient(180deg, rgba(60, 210, 140, .22), rgba(255,255,255,.06));
+    }
+    .appCard.green.active{
+      border-color: rgba(60, 210, 140, .95);
+      background: linear-gradient(180deg, rgba(60, 210, 140, .28), rgba(255,255,255,.06));
+    }
+
+    .appCardTop{ display:flex; gap:12px; align-items:center; }
+    .appIcon{
+      width:40px; height:40px; border-radius:14px;
+      display:grid; place-items:center;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      font-weight:800;
+      overflow:hidden;
+    }
+    .appIcon img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .appLabel{ font-size:14px; font-weight:800; }
+    .appSubtitle{ font-size:12px; color:var(--muted); margin-top:2px; }
+
+    .panel{
+      margin-top:16px;
+      padding:16px;
+      border-radius:var(--radius2);
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--stroke);
+      box-shadow:var(--shadow);
+    }
+    .panelTitle{ margin:0 0 10px 0; font-size:16px; }
+    .panelText{ margin:0; color:var(--muted); font-size:14px; line-height:1.45; }
+
+    .steps{
+      margin-top:12px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03);
+    }
+    .steps h3{
+      margin:0 0 8px 0;
+      font-size:12px;
+      color:var(--muted);
+      letter-spacing:.2px;
+      text-transform:uppercase;
+    }
+    .steps ol{
+      margin:0;
+      padding-left:20px;
+      color:rgba(255,255,255,.86);
+      line-height:1.5;
+      font-size:14px;
+    }
+    .steps li{ margin:8px 0; }
+
+    .infoBox{
+      margin-top:12px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03);
+      overflow:auto;
+    }
+    .infoBox h3{
+      margin:0 0 10px 0;
+      font-size:12px;
+      color:var(--muted);
+      letter-spacing:.2px;
+      text-transform:uppercase;
+    }
+
+    table.clusterTable, table.vendorTable{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      min-width:720px;
+      font-size:13px;
+      color:rgba(255,255,255,.88);
+    }
+    table.vendorTable{ min-width:760px; }
+
+    .clusterTable th, .clusterTable td,
+    .vendorTable th, .vendorTable td{
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      vertical-align:top;
+    }
+    .clusterTable th, .vendorTable th{
+      text-align:left;
+      color:rgba(255,255,255,.92);
+      font-weight:800;
+      position:sticky;
+      top:0;
+      background:rgba(255,255,255,.05);
+      backdrop-filter: blur(6px);
+    }
+    .clusterTable tr:last-child td,
+    .vendorTable tr:last-child td{ border-bottom:none; }
+
+    .badge{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.86);
+      font-size:12px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .vendorTable a{
+      color: rgba(78,161,255,.95);
+      text-decoration: none;
+      font-weight: 700;
+      word-break: break-word;
+    }
+    .vendorTable a:hover{ text-decoration: underline; }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+    .footer{
+      margin-top:14px;
+      color:var(--faint);
+      font-size:12px;
+      text-align:center;
+    }
+
+    .hidden{ display:none !important; }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <header class="header">
+      <div class="brandLogo" aria-hidden="true">
+        <img src="ees-logo.png" alt="EES Logo" />
+      </div>
+
+      <div class="headerText">
+        <h1>Enterprise Engineering Systems Knowledge Library</h1>
+      </div>
+
+      <div class="spacer"></div>
+      <button id="backBtn" class="ghostBtn hidden" type="button">Back</button>
+    </header>
+
+    <section id="topView" class="modeGrid" aria-label="Top categories">
+      <button id="engBtn" class="bigModeCard" type="button">
+        <div class="bigModeTitle">Engineering Applications</div>
+        <div class="bigModeDesc">Simulation Applications, CAD Applications, HPC Cluster Configurations</div>
+      </button>
+
+      <button id="vendorHubBtn" class="bigModeCard" type="button">
+        <div class="bigModeTitle">Contact Support</div>
+        <div class="bigModeDesc">Support contacts and documentation (two sections)</div>
+      </button>
+    </section>
+
+    <section id="engView" class="modeGrid3 hidden" aria-label="Engineering categories">
+      <button id="simBtn" class="bigModeCard" type="button">
+        <div class="bigModeTitle">Simulation Applications</div>
+        <div class="bigModeDesc">Ansys, MATLAB, HyperWorks, PBS Pro</div>
+      </button>
+
+      <button id="cadBtn" class="bigModeCard" type="button">
+        <div class="bigModeTitle">CAD Applications</div>
+        <div class="bigModeDesc">NX 2412, Creo 12</div>
+      </button>
+
+      <button id="hpcCfgBtn" class="bigModeCard" type="button">
+        <div class="bigModeTitle">HPC Cluster Configurations</div>
+        <div class="bigModeDesc">PTC, Kokomo, Ithaca, Regional</div>
+      </button>
+    </section>
+
+    <section id="vendorHubView" class="modeGrid hidden" aria-label="Vendor hub">
+      <button id="vendorContactsBtn" class="bigModeCard" type="button">
+        <div class="bigModeTitle">Support Contacts</div>
+        <div class="bigModeDesc">Vendor support websites, phone, customer #</div>
+      </button>
+
+      <button id="vendorDocsBtn" class="bigModeCard" type="button">
+        <div class="bigModeTitle">Documentation</div>
+        <div class="bigModeDesc">Vendor documentation links</div>
+      </button>
+    </section>
+
+    <section id="appsView" class="hidden" aria-label="Items">
+      <div id="appsGrid" class="appGrid"></div>
+
+      <div class="panel" aria-label="Selection panel">
+        <h2 id="panelTitle" class="panelTitle">Choose an item</h2>
+        <p id="panelText" class="panelText">Click a button above to view details.</p>
+
+        <div id="stepsBox" class="steps hidden">
+          <h3>Installation Steps</h3>
+          <ol id="stepsList"></ol>
+        </div>
+
+        <div id="regionalInfoBox" class="infoBox hidden" aria-label="Regional cluster information">
+          <h3>Regional Cluster Configuration</h3>
+          <table class="clusterTable" aria-label="Regional cluster node types table">
+            <thead>
+              <tr>
+                <th>Node Type</th>
+                <th>Count</th>
+                <th>CPU</th>
+                <th>Memory</th>
+                <th>Storage</th>
+                <th>Network</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge">Head Node</span></td>
+                <td>1</td>
+                <td>32 cores</td>
+                <td>128–256 GB</td>
+                <td>SSD + NVMe</td>
+                <td>Mgmt + Fabric</td>
+                <td>Scheduler, licensing, cluster control</td>
+              </tr>
+              <tr>
+                <td><span class="badge">Logon Node</span></td>
+                <td>1</td>
+                <td>24 cores</td>
+                <td>128 GB</td>
+                <td>SSD</td>
+                <td>User + Fabric</td>
+                <td>SSH, pre/post-processing</td>
+              </tr>
+              <tr>
+                <td><span class="badge">Compute Nodes</span></td>
+                <td>12</td>
+                <td>64 cores</td>
+                <td>256–512 GB</td>
+                <td>SSD + optional NVMe</td>
+                <td>Fabric</td>
+                <td>Simulation workloads</td>
+              </tr>
+              <tr>
+                <td><span class="badge">Optional GPU Nodes</span></td>
+                <td>1–2</td>
+                <td>32–64 cores</td>
+                <td>256–512 GB</td>
+                <td>SSD/NVMe</td>
+                <td>Fabric</td>
+                <td>GPU-accelerated solvers</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="vendorContactsBox" class="infoBox hidden" aria-label="Vendor support contacts">
+          <h3>Vendor Support Contacts</h3>
+          <table class="vendorTable" aria-label="Vendor support contacts table">
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Support Website</th>
+                <th>Phone Number</th>
+                <th>Customer Number</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>GTAC</td>
+                <td><a href="https://www.siemens.com/en-us/support/software-support-services/" target="_blank" rel="noreferrer">https://www.siemens.com/en-us/support/software-support-services/</a></td>
+                <td class="mono"></td>
+                <td class="mono"></td>
+              </tr>
+              <tr>
+                <td>Dassault Systemes</td>
+                <td><a href="https://www.3ds.com" target="_blank" rel="noreferrer">https://www.3ds.com</a></td>
+                <td class="mono"></td>
+                <td class="mono"></td>
+              </tr>
+              <tr>
+                <td>Ansys</td>
+                <td><a href="https://support.ansys.com/Home/HomePage" target="_blank" rel="noreferrer">https://support.ansys.com/Home/HomePage</a></td>
+                <td class="mono"></td>
+                <td class="mono"></td>
+              </tr>
+              <tr>
+                <td>Mathworks</td>
+                <td><a href="https://www.mathworks.com/support/contact_us.html" target="_blank" rel="noreferrer">https://www.mathworks.com/support/contact_us.html</a></td>
+                <td class="mono"></td>
+                <td class="mono"></td>
+              </tr>
+              <tr>
+                <td>Altair</td>
+                <td><a href="https://altair.com/customer-support" target="_blank" rel="noreferrer">https://altair.com/customer-support</a></td>
+                <td class="mono"></td>
+                <td class="mono"></td>
+              </tr>
+              <tr>
+                <td>Parametric Technologies</td>
+                <td><a href="https://support.ptc.com/appserver/support/account/contact_customer_care.jsp" target="_blank" rel="noreferrer">https://support.ptc.com/appserver/support/account/contact_customer_care.jsp</a></td>
+                <td class="mono"></td>
+                <td class="mono"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="vendorDocsBox" class="infoBox hidden" aria-label="Vendor documentation">
+          <h3>Vendor Documentation</h3>
+          <p style="margin:0 0 10px 0;color:rgba(255,255,255,.82);line-height:1.5;font-size:14px;">
+            Select a vendor documentation link:
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      Save images next to this HTML:
+      ees-logo.png, ansys-logo.png, mathworks-logo.png, altair-logo.png, nx-logo.png, autodesk-logo.png, ptc-logo.png, bw-logo.png
+    </footer>
+  </div>
+
+  <script>
+    const ANSYS_LOGO_SRC = "ansys-logo.png";
+    const MATHWORKS_LOGO_SRC = "mathworks-logo.png";
+    const ALTAIR_LOGO_SRC = "altair-logo.png";
+    const NX_LOGO_SRC = "nx-logo.png";
+    const AUTODESK_LOGO_SRC = "autodesk-logo.png";
+    const PTC_LOGO_SRC = "ptc-logo.png";
+    const BW_LOGO_SRC = "bw-logo.png"; // <-- ADDED
+
+    const DATA = {
+      docs: [
+        { id: "doc-ansys", label: "Ansys", subtitle: "Install & Licensing", url: "https://ansyshelp.ansys.com/public/account/secured?returnurl=/Views/Secured/corp/v251/en/installation/installlic.html", iconSrc: ANSYS_LOGO_SRC },
+        { id: "doc-mathworks", label: "Mathworks", subtitle: "Install Documentation", url: "https://www.mathworks.com/help/install/ug/install-documentation.html", iconSrc: MATHWORKS_LOGO_SRC },
+        { id: "doc-altair", label: "Altair", subtitle: "Documentation", url: "#", iconSrc: ALTAIR_LOGO_SRC },
+        { id: "doc-creo", label: "Creo", subtitle: "Documentation", url: "#", iconSrc: PTC_LOGO_SRC },
+        { id: "doc-nx", label: "NX", subtitle: "Documentation", url: "#", iconSrc: NX_LOGO_SRC },
+        { id: "doc-autodesk", label: "Autodesk", subtitle: "Documentation", url: "#", iconSrc: AUTODESK_LOGO_SRC }
+      ],
+      simApps: [
+        { id: "ansys-2025r2", label: "Ansys", subtitle: "2025 R2", iconSrc: ANSYS_LOGO_SRC },
+        { id: "matlab-2025b", label: "MATLAB", subtitle: "2025b", iconSrc: MATHWORKS_LOGO_SRC },
+        { id: "hyperworks-2026", label: "Altair HyperWorks", subtitle: "2026", iconSrc: ALTAIR_LOGO_SRC },
+        { id: "pbspro", label: "PBS Professional", subtitle: "", iconSrc: ALTAIR_LOGO_SRC }
+      ],
+      cadApps: [
+        { id: "nx-2412", label: "NX", subtitle: "2412", iconSrc: NX_LOGO_SRC },
+        { id: "creo-12", label: "Creo", subtitle: "12", iconSrc: PTC_LOGO_SRC }
+      ],
+      hpcClusters: [
+        { id: "ptc-cluster", label: "PTC", subtitle: "Cluster", iconSrc: BW_LOGO_SRC },
+        { id: "kokomo-cluster", label: "Kokomo", subtitle: "Cluster", iconSrc: BW_LOGO_SRC },
+        { id: "ithaca-cluster", label: "Ithaca", subtitle: "Cluster", iconSrc: BW_LOGO_SRC },
+        { id: "regional-cluster", label: "Regional", subtitle: "Cluster", styleClass: "green", iconSrc: BW_LOGO_SRC }
+      ]
+    };
+
+    const INSTALL_STEPS = {
+      "ansys-2025r2": {
+        title: "Ansys 2025 R5 — Installation Steps (Displayed from the Ansys 2025 R2 button)",
+        steps: [
+          "Download the Ansys 2025 R5 installation media from your organization’s Ansys portal/internal software share.",
+          "Verify the download (checksum/size) if your IT team provides validation values.",
+          "Extract or mount the installer media to a local folder (avoid installing directly from a network path when possible).",
+          "Right-click the installer (setup.exe) and select “Run as administrator”.",
+          "Choose Typical or Custom installation. In Custom, select only the products you need (e.g., Mechanical, Fluent).",
+          "Choose the install directory (keep defaults unless your IT standard specifies a different location).",
+          "Allow prerequisite components (VC++ redistributables, etc.) to install if prompted.",
+          "Proceed with installation and wait for completion.",
+          "Reboot the PC if the installer requests it.",
+          "Launch an Ansys application to confirm it opens and the basic UI loads successfully."
+        ]
+      },
+      "matlab-2025b": {
+        title: "MATLAB 2025b — Installation Steps",
+        steps: [
+          "Download the MATLAB 2025b Windows installer from MathWorks (or your internal software portal).",
+          "Extract the installer files to a local folder (avoid running from a network share).",
+          "Right-click the installer and select “Run as administrator”.",
+          "Choose your organization’s install method (sign-in / file installation key / etc.).",
+          "Select the installation folder and choose the toolboxes you need.",
+          "Start the installation and wait for completion.",
+          "Launch MATLAB to confirm it opens successfully and the desktop loads."
+        ]
+      },
+      "hyperworks-2026": {
+        title: "Altair HyperWorks 2026 — Installation Steps",
+        steps: [
+          "Download the HyperWorks 2026 Windows installer from Altair One (or your internal software repository).",
+          "Extract the installer to a local folder.",
+          "Right-click the installer and choose “Run as administrator”.",
+          "Select the HyperWorks components you need as presented by the installer.",
+          "Choose the installation directory (keep defaults unless your IT standard requires otherwise).",
+          "Proceed with installation and wait for completion.",
+          "Reboot if prompted by the installer.",
+          "Launch a HyperWorks application (e.g., HyperMesh/HyperView if included) to validate it opens."
+        ]
+      },
+      "pbspro": {
+        title: "PBS Professional — Installation Steps (Windows 11 node/client)",
+        steps: [
+          "Obtain the PBS Professional installer/package approved by your organization (scheduler environments vary by site).",
+          "Confirm whether this Windows 11 machine is intended to be a PBS execution node, client tools only, or administrative workstation.",
+          "Install any prerequisites required by your organization’s PBS package (for example, approved runtime libraries).",
+          "Run the installer as Administrator.",
+          "When prompted, configure the PBS server/scheduler connection information according to your site standard (server hostname, communication ports if applicable).",
+          "Complete the installation.",
+          "If your environment requires it, ensure the PBS services are running (or client tools are available) and the machine is allowed by the cluster configuration.",
+          "Validate by running a basic PBS command (if client tools are installed) or by confirming the node/client is visible/usable in your PBS environment."
+        ]
+      },
+      "nx-2412": {
+        title: "Siemens NX 2412 — Installation Steps",
+        steps: [
+          "Obtain the NX 2412 installation media from your organization’s distribution source (Siemens download/internal share).",
+          "Verify prerequisites per your IT standard (disk space, supported Windows build, required redistributables).",
+          "Extract/mount the NX installer media to a local folder.",
+          "Right-click the NX installer and select “Run as administrator”.",
+          "Follow the installer prompts to choose components and the installation directory (use your standard NX install path if applicable).",
+          "Complete the installation and reboot if prompted.",
+          "Launch NX to confirm it starts and reaches the main UI."
+        ]
+      },
+      "creo-12": {
+        title: "PTC Creo 12 — Installation Steps",
+        steps: [
+          "Download/obtain the Creo 12 installer package from PTC (or your internal software portal).",
+          "Extract the installer to a local directory.",
+          "Run the installer as Administrator.",
+          "Select the Creo modules/components you need (as allowed by your organization).",
+          "Choose the installation folder and proceed with the install.",
+          "Reboot if prompted by the installer.",
+          "Launch Creo to confirm it opens successfully and reaches the main UI."
+        ]
+      }
+    };
+
+    const VIEWS = {
+      top: document.getElementById("topView"),
+      eng: document.getElementById("engView"),
+      vendorHub: document.getElementById("vendorHubView"),
+      content: document.getElementById("appsView")
+    };
+
+    const appsGrid = document.getElementById("appsGrid");
+    const backBtn = document.getElementById("backBtn");
+
+    const panelTitle = document.getElementById("panelTitle");
+    const panelText = document.getElementById("panelText");
+
+    const stepsBox = document.getElementById("stepsBox");
+    const stepsList = document.getElementById("stepsList");
+
+    const regionalInfoBox = document.getElementById("regionalInfoBox");
+    const vendorContactsBox = document.getElementById("vendorContactsBox");
+    const vendorDocsBox = document.getElementById("vendorDocsBox");
+
+    let view = "top";
+
+    function showOnly(viewName) {
+      Object.values(VIEWS).forEach(v => v.classList.add("hidden"));
+      VIEWS[viewName].classList.remove("hidden");
+      backBtn.classList.toggle("hidden", view === "top");
+    }
+
+    function resetPanel() {
+      panelTitle.textContent = "Choose an item";
+      panelText.textContent = "Click a button above to view details.";
+
+      stepsBox.classList.add("hidden");
+      stepsList.innerHTML = "";
+
+      regionalInfoBox.classList.add("hidden");
+      vendorContactsBox.classList.add("hidden");
+      vendorDocsBox.classList.add("hidden");
+    }
+
+    function setActive(btn) {
+      document.querySelectorAll(".appCard").forEach(el => el.classList.remove("active"));
+      btn.classList.add("active");
+    }
+
+    function escapeHtml(s) {
+      return (s ?? "")
+        .toString()
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function showSteps(itemId) {
+      const stepsData = INSTALL_STEPS[itemId];
+      if (!stepsData?.steps?.length) {
+        stepsBox.classList.add("hidden");
+        stepsList.innerHTML = "";
+        return false;
+      }
+
+      panelText.textContent = stepsData.title || panelText.textContent;
+      stepsList.innerHTML = stepsData.steps.map(s => `<li>${escapeHtml(s)}</li>`).join("");
+      stepsBox.classList.remove("hidden");
+      return true;
+    }
+
+    function renderCards(list, onClick) {
+      appsGrid.innerHTML = list.map(item => {
+        const icon = item.iconSrc
+          ? `<img src="${escapeHtml(item.iconSrc)}" alt="" />`
+          : `${escapeHtml(item.label?.slice(0,1) || "?")}`;
+
+        return `
+          <button type="button" class="appCard ${escapeHtml(item.styleClass || "")}" data-id="${escapeHtml(item.id)}">
+            <div class="appCardTop">
+              <div class="appIcon" aria-hidden="true">${icon}</div>
+              <div class="appMeta">
+                <div class="appLabel">${escapeHtml(item.label)}</div>
+                <div class="appSubtitle">${escapeHtml(item.subtitle || "")}</div>
+              </div>
+            </div>
+          </button>
+        `;
+      }).join("");
+
+      appsGrid.onclick = (e) => {
+        const btn = e.target.closest(".appCard");
+        if (!btn) return;
+        const id = btn.dataset.id;
+        const item = list.find(x => x.id === id);
+        if (!item) return;
+        onClick(item, btn);
+      };
+    }
+
+    function go(to) {
+      view = to;
+
+      if (view === "top") return showOnly("top");
+      if (view === "eng") return showOnly("eng");
+      if (view === "vendorHub") return showOnly("vendorHub");
+
+      if (view === "simApps") {
+        showOnly("content");
+        resetPanel();
+        panelTitle.textContent = "Simulation Applications";
+        panelText.textContent = "Select an application:";
+        renderCards(DATA.simApps, (item, btn) => {
+          setActive(btn);
+          resetPanel();
+          panelTitle.textContent = `${item.label} ${item.subtitle || ""}`.trim();
+          if (!showSteps(item.id)) panelText.textContent = "No instructions added yet for this selection.";
+        });
+        return;
+      }
+
+      if (view === "cadApps") {
+        showOnly("content");
+        resetPanel();
+        panelTitle.textContent = "CAD Applications";
+        panelText.textContent = "Select an application:";
+        renderCards(DATA.cadApps, (item, btn) => {
+          setActive(btn);
+          resetPanel();
+          panelTitle.textContent = `${item.label} ${item.subtitle || ""}`.trim();
+          if (!showSteps(item.id)) panelText.textContent = "No instructions added yet for this selection.";
+        });
+        return;
+      }
+
+      if (view === "hpcCfg") {
+        showOnly("content");
+        resetPanel();
+        panelTitle.textContent = "HPC Cluster Configurations";
+        panelText.textContent = "Select a cluster:";
+        renderCards(DATA.hpcClusters, (item, btn) => {
+          setActive(btn);
+          resetPanel();
+          panelTitle.textContent = `${item.label} ${item.subtitle || ""}`.trim();
+
+          if (item.id === "ptc-cluster" || item.id === "kokomo-cluster" || item.id === "ithaca-cluster") {
+            panelText.textContent = "Under Construction";
+            return;
+          }
+
+          if (item.id === "regional-cluster") {
+            panelText.textContent = "Regional Cluster Configuration";
+            regionalInfoBox.classList.remove("hidden");
+            return;
+          }
+
+          panelText.textContent = "No instructions added yet for this selection.";
+        });
+        return;
+      }
+
+      if (view === "vendorContacts") {
+        showOnly("content");
+        appsGrid.innerHTML = "";
+        appsGrid.onclick = null;
+        resetPanel();
+        panelTitle.textContent = "Support Contacts";
+        panelText.textContent = "Reference the table below for vendor support sites.";
+        vendorContactsBox.classList.remove("hidden");
+        return;
+      }
+
+      if (view === "vendorDocs") {
+        showOnly("content");
+        resetPanel();
+        panelTitle.textContent = "Documentation";
+        panelText.textContent = "Select a vendor documentation link:";
+        vendorDocsBox.classList.remove("hidden");
+
+        renderCards(DATA.docs, (doc, btn) => {
+          setActive(btn);
+          if (!doc.url || doc.url === "#") {
+            panelText.textContent = `${doc.label} documentation link is not set yet.`;
+            return;
+          }
+          window.open(doc.url, "_blank", "noopener,noreferrer");
+        });
+        return;
+      }
+    }
+
+    function goBack() {
+      if (view === "eng") return go("top");
+      if (view === "vendorHub") return go("top");
+      if (view === "simApps" || view === "cadApps" || view === "hpcCfg") return go("eng");
+      if (view === "vendorContacts" || view === "vendorDocs") return go("vendorHub");
+      return go("top");
+    }
+
+    document.getElementById("engBtn").addEventListener("click", () => go("eng"));
+    document.getElementById("vendorHubBtn").addEventListener("click", () => go("vendorHub"));
+
+    document.getElementById("simBtn").addEventListener("click", () => go("simApps"));
+    document.getElementById("cadBtn").addEventListener("click", () => go("cadApps"));
+    document.getElementById("hpcCfgBtn").addEventListener("click", () => go("hpcCfg"));
+
+    document.getElementById("vendorContactsBtn").addEventListener("click", () => go("vendorContacts"));
+    document.getElementById("vendorDocsBtn").addEventListener("click", () => go("vendorDocs"));
+
+    backBtn.addEventListener("click", goBack);
+
+    go("top");
+  </script>
+</body>
+</html>
